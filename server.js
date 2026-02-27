@@ -33,7 +33,9 @@ app.use(express.json())
 
 //Get call to main page to load the total tasks and the tasks left to do 
 app.get('/',async (request, response)=>{
+    //creates variable with all the todos
     const todoItems = await db.collection('todos').find().toArray()
+    //creates variable with all the todos that are not completed
     const itemsLeft = await db.collection('todos').countDocuments({completed: false})
     response.render('index.ejs', { items: todoItems, left: itemsLeft })
     // db.collection('todos').find().toArray()

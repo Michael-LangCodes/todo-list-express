@@ -25,9 +25,9 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true })
 app.set('view engine', 'ejs')
 //Allowing access to files in the public folder
 app.use(express.static('public'))
-//
+//Parses incoming requests with encoded URLs
 app.use(express.urlencoded({ extended: true }))
-//JSON call
+//Parses incoming JSON strings to JS objects
 app.use(express.json())
 
 

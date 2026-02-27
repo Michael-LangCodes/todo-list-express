@@ -9,6 +9,8 @@ const PORT = 2121
 //Allow use of enviornment configurations
 require('dotenv').config()
 
+console.log(process.env.DB_STRING);
+
 //Creating Database Variables
 let db,
     dbConnectionStr = process.env.DB_STRING,

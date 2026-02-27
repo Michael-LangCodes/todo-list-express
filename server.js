@@ -1,26 +1,37 @@
+//Get express into server
 const express = require('express')
+//Create variable for easily calling express methods
 const app = express()
+//Create MongoDB Client
 const MongoClient = require('mongodb').MongoClient
+//Declare default port
 const PORT = 2121
+//Allow use of enviornment configurations
 require('dotenv').config()
 
-
+//Creating Database Variables
 let db,
     dbConnectionStr = process.env.DB_STRING,
     dbName = 'todo'
 
+//Connecting to MongoDB Database
 MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true })
     .then(client => {
         console.log(`Connected to ${dbName} Database`)
         db = client.db(dbName)
     })
     
+//Declaring ejs as the view engine
 app.set('view engine', 'ejs')
+//Allowing access to files in the public folder
 app.use(express.static('public'))
+//
 app.use(express.urlencoded({ extended: true }))
+//JSON call
 app.use(express.json())
 
 
+//Get call to main page to load the total tasks and the tasks left to do 
 app.get('/',async (request, response)=>{
     const todoItems = await db.collection('todos').find().toArray()
     const itemsLeft = await db.collection('todos').countDocuments({completed: false})
@@ -35,6 +46,7 @@ app.get('/',async (request, response)=>{
     // .catch(error => console.error(error))
 })
 
+//Post call to create a new task
 app.post('/addTodo', (request, response) => {
     db.collection('todos').insertOne({thing: request.body.todoItem, completed: false})
     .then(result => {
@@ -44,6 +56,7 @@ app.post('/addTodo', (request, response) => {
     .catch(error => console.error(error))
 })
 
+//Update call to update a task to completed
 app.put('/markComplete', (request, response) => {
     db.collection('todos').updateOne({thing: request.body.itemFromJS},{
         $set: {
@@ -61,6 +74,7 @@ app.put('/markComplete', (request, response) => {
 
 })
 
+//Update call to mark a task as incomplete
 app.put('/markUnComplete', (request, response) => {
     db.collection('todos').updateOne({thing: request.body.itemFromJS},{
         $set: {
@@ -78,6 +92,7 @@ app.put('/markUnComplete', (request, response) => {
 
 })
 
+//Delete call to remove a task 
 app.delete('/deleteItem', (request, response) => {
     db.collection('todos').deleteOne({thing: request.body.itemFromJS})
     .then(result => {
@@ -88,6 +103,7 @@ app.delete('/deleteItem', (request, response) => {
 
 })
 
+//Listen call to know where to host the server
 app.listen(process.env.PORT || PORT, ()=>{
     console.log(`Server running on port ${PORT}`)
 })

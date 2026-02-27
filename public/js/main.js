@@ -1,15 +1,21 @@
+//variable for the selection of the fa-trash class
 const deleteBtn = document.querySelectorAll('.fa-trash')
+//variable for selection of the span within an item class
 const item = document.querySelectorAll('.item span')
+//variable for the seelction of the completed class in span
 const itemCompleted = document.querySelectorAll('.item span.completed')
 
+//array that runs the deleteItem function everytime a deleteBtn is clicked
 Array.from(deleteBtn).forEach((element)=>{
     element.addEventListener('click', deleteItem)
 })
 
+//array taht runs the markComplete function everytime an item is clicked
 Array.from(item).forEach((element)=>{
     element.addEventListener('click', markComplete)
 })
 
+//array that runs the markUncomplete function everytime itemCompleted is clicked
 Array.from(itemCompleted).forEach((element)=>{
     element.addEventListener('click', markUnComplete)
 })
